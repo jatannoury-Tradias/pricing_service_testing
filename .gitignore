@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+config/spaceship_tokens.py
 .Python
 build/
 develop-eggs/
