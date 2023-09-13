@@ -1,8 +1,13 @@
 import asyncio
 import json
 import pytest
+import datetime
 
 from controllers.spaceship_controllers import SpaceshipController
+
+
+def tz_to_timestamp(tz):
+    return datetime.datetime.strptime(tz, "%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 class TestWSConnection:
@@ -80,7 +85,34 @@ class TestWSConnection:
             assert connection_response[1]['type'] == "subscribed"
             assert connection_response[1]['message'] == "success"
 
+    @pytest.mark.asyncio
+    async def test_no_prices_from_the_future(self):
+        counter = 0
+        async for message in self.spaceship_controller.tickers(channel_name="prices", instruments_array=["BTC-EUR"], disconnect_after=100):
 
+            if counter == 50:
+                break
+            else:
+                counter += 1
+            try:
+                timestamp = json.loads(message.decode('utf-8'))['timestamp']
+                assert tz_to_timestamp(timestamp) < datetime.datetime.utcnow()
+            except KeyError:
+                pass
 
+    @pytest.mark.asyncio
+    async def test_ordered_prices(self):
+        timestamps = []
+        async for message in self.spaceship_controller.tickers(channel_name="prices", instruments_array=["BTC-EUR"], disconnect_after=100):
+            if len(timestamps) == 50:
+                break
+            try:
+                timestamp = json.loads(message.decode('utf-8'))['timestamp']
+                timestamps.append(timestamp)
+
+            except KeyError:
+                pass
+        for i in range(len(timestamps)-1):
+            assert tz_to_timestamp(timestamps[i]) < tz_to_timestamp(timestamps[i+1])
 
 
