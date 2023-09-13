@@ -13,10 +13,11 @@ class SpaceshipController(
     def __init__(self):
         super().__init__()
 
+
 if __name__ == '__main__':
     import asyncio
     async def main():
-        async for message in  SpaceshipController().tickers(["BTC-EUR"]):
+        async for message in SpaceshipController().tickers(["BTC-EUR"]):
             print(message)
 
     asyncio.run(main())
