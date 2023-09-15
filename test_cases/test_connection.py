@@ -17,12 +17,20 @@ class TestWSConnection:
         async for message in self.spaceship_controller.tickers(channel_name="prices", instruments_array=["BTC-EUR"]):
             return json.loads(message.decode('utf-8'))
 
-    async def return_multiple_messages(self, number_of_messages):
+    async def return_multiple_messages(self, number_of_messages, channel_name='prices', instruments_array=None):
+        if instruments_array is None:
+            instruments_array = ['BTC-EUR']
         messages = []
-        async for message in self.spaceship_controller.tickers(channel_name="prices", instruments_array=["BTC-EUR"]):
+        async for message in self.spaceship_controller.tickers(channel_name=channel_name, instruments_array=instruments_array, print_messages=True):
             messages.append(json.loads(message.decode('utf-8')))
             if len(messages) == number_of_messages:
                 break
+        return messages
+
+    async def place_order(self, order):
+        messages = []
+        async for message in self.spaceship_controller.orders(order, print_messages=True, disconnect_after=15):
+            messages.append(json.loads(message.decode('utf-8')))
         return messages
 
     @pytest.mark.asyncio
@@ -89,7 +97,6 @@ class TestWSConnection:
     async def test_no_prices_from_the_future(self):
         counter = 0
         async for message in self.spaceship_controller.tickers(channel_name="prices", instruments_array=["BTC-EUR"], disconnect_after=100):
-
             if counter == 50:
                 break
             else:
@@ -114,5 +121,44 @@ class TestWSConnection:
                 pass
         for i in range(len(timestamps)-1):
             assert tz_to_timestamp(timestamps[i]) < tz_to_timestamp(timestamps[i+1])
+
+
+    @pytest.mark.asyncio
+    async def test_diff_subscription_messages(self):
+        for i in range(5):
+            right_messages = await self.return_multiple_messages(number_of_messages=2, channel_name="prices", instruments_array=["BTC-EUR"])
+            assert right_messages[0]['type'] == "subscribe"
+            assert right_messages[0]['message'] == "Websocket Connected"
+            assert right_messages[1]['type'] == "subscribed"
+            assert right_messages[1]['message'] == "success"
+        wrong_messages = await self.return_multiple_messages(number_of_messages=2, channel_name="00000", instruments_array=["btc-EUR"])
+        assert wrong_messages[0]['type'] == "subscribe"
+        assert wrong_messages[0]['message'] == "Websocket Connected"
+        assert wrong_messages[1]['type'] == "subscribe"
+        assert wrong_messages[1]['message'] == "Invalid SubChannel"
+
+    @pytest.mark.asyncio
+    async def test_execution_quality(self):
+        eur_amount_order = {
+            "type": "CREATE_ORDER",
+            "order": {
+                "instrument": "BTC-EUR",
+                "order_type": "MARKET",
+                "side": "BUY",
+                "amount": "1000",
+                "currency": "EUR",
+            }
+        }
+
+        tasks = []
+        tasks.append(asyncio.create_task(self.return_multiple_messages(15)))
+        tasks.append(asyncio.create_task(self.place_order(eur_amount_order)))
+        await asyncio.gather(*tasks)
+
+
+
+
+
+
 
 
