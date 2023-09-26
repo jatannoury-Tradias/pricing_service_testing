@@ -9,7 +9,7 @@ class OrdersController(ControllersInitiator):
     def __init__(self):
         super().__init__()
 
-    async def orders(self,order, channel_name: str = 'orders', disconnect_after: int = 5, print_messages=False):
+    async def orders(self, order, channel_name: str = 'orders', disconnect_after: int = 5, print_messages=False):
 
         async with websockets.connect(uri=self.ws_url, extra_headers=self.ws_headers) as websocket:
             await websocket.send(json.dumps({
@@ -17,8 +17,7 @@ class OrdersController(ControllersInitiator):
                 "channelname": channel_name
             }))
             await asyncio.sleep(1)
-            websocket.send(json.dumps(order))
-            print('ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER SENT ORDER')
+            await websocket.send(json.dumps(order))
             start_time = asyncio.get_event_loop().time()
             while True:
                 message = await websocket.recv()

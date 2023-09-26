@@ -1,5 +1,6 @@
 from controllers.spaceship_controllers.client_controller import ClientsController
 from controllers.spaceship_controllers.opcs_controller import OpcsController
+from controllers.spaceship_controllers.orders_controller import OrdersController
 from controllers.spaceship_controllers.ticker_controller import TickerController
 from controllers.spaceship_controllers.tiers_controller import TiersController
 
@@ -8,7 +9,8 @@ class SpaceshipController(
                           OpcsController,
                           TickerController,
                           ClientsController,
-                          TiersController
+                          TiersController,
+                          OrdersController,
                           ):
     def __init__(self):
         super().__init__()
