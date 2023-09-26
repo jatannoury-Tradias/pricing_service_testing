@@ -3,7 +3,7 @@ import json
 
 import websockets
 
-from config.tokens import PREPROD_SPACESHIP_CLIENT_TOKEN
+from config.tokens import UAT_SPACESHIP_CLIENT_TOKEN, PREPROD_SPACESHIP_CLIENT_TOKEN
 
 env = "preprod"
 base_url = f"https://{env}.tradias.link/api"

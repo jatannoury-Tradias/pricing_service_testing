@@ -48,7 +48,7 @@ class TickerController(ControllersInitiator):
 
 if __name__ == '__main__':
     async def main():
-        async for message in  TickerController().tickers(instruments_array = ['BTC-EUR']):
+        async for message in TickerController().tickers(instruments_array = ['BTC-EUR']):
             print(message)
 
     asyncio.run(main())
