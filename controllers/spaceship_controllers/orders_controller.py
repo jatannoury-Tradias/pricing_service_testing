@@ -9,7 +9,11 @@ class OrdersController(ControllersInitiator):
     def __init__(self):
         super().__init__()
 
+<<<<<<< HEAD
     async def orders(self,order, channel_name: str = 'orders', disconnect_after: int = 5, print_messages=False):
+=======
+    async def orders(self, order, channel_name: str = 'orders', disconnect_after: int = 5, print_messages=False):
+>>>>>>> origin/main
 
         async with websockets.connect(uri=self.ws_url, extra_headers=self.ws_headers) as websocket:
             await websocket.send(json.dumps({
@@ -30,6 +34,7 @@ class OrdersController(ControllersInitiator):
                 current_time = asyncio.get_event_loop().time()
                 if current_time - start_time >= disconnect_after:
                     break
+<<<<<<< HEAD
 
 if __name__ == "__main__":
     async def main():
@@ -45,3 +50,5 @@ if __name__ == "__main__":
         }):
             print(message)
     asyncio.run(main())
+=======
+>>>>>>> origin/main
