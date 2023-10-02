@@ -3,12 +3,12 @@ import json
 
 import websockets
 
-from config.tokens import PREPROD_SPACESHIP_CLIENT_TOKEN
+from config.tokens import UAT_SPACESHIP_CLIENT_TOKEN,PREPROD_SPACESHIP_CLIENT_TOKEN
 
 env = "preprod"
 base_url = f"https://{env}.tradias.link/api"
 ws_url = f"wss://ws.{env}.tradias.link"
-client_token = PREPROD_SPACESHIP_CLIENT_TOKEN
+client_token = "5jexcX_1ZdNePLEHGJbqC5uoV-1WlBqySbqJzvsXBaU"
 ws_headers = {
     "x-token-id": f"{client_token}",
 }

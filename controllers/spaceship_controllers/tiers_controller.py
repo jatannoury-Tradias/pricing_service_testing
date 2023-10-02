@@ -1,6 +1,5 @@
 import requests
 
-from config.variables import PricingServiceJosephTierTestingVariables
 from controllers.spaceship_controllers.controllers_initiator import ControllersInitiator
 from config.endpoints import RequestHandler
 from controllers.inputs_collector import get_all_inputs
@@ -31,7 +30,11 @@ class TiersController(ControllersInitiator):
         price_algo = get_price_algo()
         all_outbounds = generate_opcs(instrument_codes, request_object, pricing_df, price_precision_df, tier_id,
                                       price_algo)
+        counter = 0
         for instrument_code, opc_info in all_outbounds.items():
+            if counter == 5:
+                break
+            counter +=1
             status_code, response = request_object.create_opc(opc_info, instrument_code)
             print(response)
         return {

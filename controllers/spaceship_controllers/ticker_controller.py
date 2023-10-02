@@ -9,7 +9,7 @@ class TickerController(ControllersInitiator):
     def  __init__(self):
         super().__init__()
 
-    async def tickers(self,instruments_array: List, channel_name: str = 'prices', disconnect_after: int = 5,print_messages = False):
+    async def tickers(self,instruments_array: List,message_flag: list[bool], channel_name: str = 'prices', disconnect_after: int = 5,print_messages = False):
         """
         This asynchronous generator function connects to the websocket,
         subscribes to the prices channel, and yields messages as they are received.
@@ -32,7 +32,7 @@ class TickerController(ControllersInitiator):
 
 
             start_time = asyncio.get_event_loop().time()
-            while True:
+            while message_flag[0]:
                 message = await websocket.recv()
                 if print_messages == True:
                     print(message)
@@ -45,6 +45,8 @@ class TickerController(ControllersInitiator):
                 current_time = asyncio.get_event_loop().time()
                 if current_time - start_time >= disconnect_after:
                     break
+        print("Succesful close of websocket")
+
 
 if __name__ == '__main__':
     async def main():

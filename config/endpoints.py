@@ -3,7 +3,7 @@ from typing import Tuple
 import requests
 
 from config.OPC_config import OpcConfig
-from config.tokens import PREPROD_SPACESHIP_USER_TOKEN
+from config.tokens import PREPROD_SPACESHIP_USER_TOKEN, UAT_SPACESHIP_USER_TOKEN
 from models.OutboudPriceChannel import OutboundPriceChannel
 from tools.convert_to_dict import convert_to_dict
 

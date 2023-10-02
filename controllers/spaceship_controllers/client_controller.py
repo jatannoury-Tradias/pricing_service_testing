@@ -1,6 +1,5 @@
 import requests
 
-from config.variables import PricesServiceTestingClientVariables
 from controllers.spaceship_controllers.controllers_initiator import ControllersInitiator
 
 
@@ -11,7 +10,7 @@ class ClientsController(ControllersInitiator):
         to_update = {
             'tier_id': f"{tier_id}"
         }
-        return requests.put(f"{self.clients_url}/{PricesServiceTestingClientVariables.info.value['id']}/update_tier",headers=self.user_apis_headers,json=to_update)
+        return requests.put(f"{self.clients_url}/{self.client_config.info.value['id']}/update_tier",headers=self.user_apis_headers,json=to_update)
 
 if __name__ == '__main__':
     tier_testing_id = "ab1817a5-c738-433a-90a1-2130c9adf17d"

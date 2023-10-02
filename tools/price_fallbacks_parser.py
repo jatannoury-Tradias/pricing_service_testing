@@ -20,4 +20,5 @@ def order_fixer(price_fallbacks):
     return price_fallbacks
 
 def parse_price_fallbacks(price_fallbacks):
+    print("====================>", price_fallbacks)
     return [PriceFallbackHierarchy.parse_obj(price_fallback) for price_fallback in order_fixer(missing_entries_filler(price_fallbacks))]

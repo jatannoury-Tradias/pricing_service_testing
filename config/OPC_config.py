@@ -4,7 +4,7 @@ import dataclasses
 @dataclasses.dataclass
 class OpcConfig:
     EXCHANGE_HIERARCHY = ["Talos", "Coinbase", "Trever", "B2C2", "Binance", "Bitfinex", "Bitstamp", "Kraken", "BitVavo",
-        "ManualPricing", ]
+        "ManualPricing", "Test Index"]
     price_function = "INTERPOLATE"
     slow_quoting_interval = "0.0"
     max_spread = None
